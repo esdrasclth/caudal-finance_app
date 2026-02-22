@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../lib/supabase'
+
 
 interface Props {
   onClose: () => void
@@ -21,6 +22,7 @@ export default function FormTransaccion({ onClose, onSuccess }: Props) {
   const [walletDestinoId, setWalletDestinoId] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const montoRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => { cargarDatos() }, [])
   useEffect(() => { setSubcategoriaId('') }, [categoriaId])
@@ -32,6 +34,7 @@ export default function FormTransaccion({ onClose, onSuccess }: Props) {
       setWalletDestinoId('')
     }
   }, [walletId, wallets])
+
 
   const cargarDatos = async () => {
     const { data: { user } } = await supabase.auth.getUser()
@@ -229,7 +232,10 @@ export default function FormTransaccion({ onClose, onSuccess }: Props) {
             <div className="relative">
               <span className="absolute font-medium -translate-y-1/2 left-4 top-1/2 text-slate-400">L</span>
               <input
+                ref={montoRef}
                 type="number"
+                inputMode="decimal"
+                autoFocus
                 value={monto}
                 onChange={(e) => setMonto(e.target.value)}
                 placeholder="0.00"
