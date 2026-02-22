@@ -31,6 +31,23 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         profile = np
       }
 
+      if (!profile) {
+        const nombre = user.user_metadata?.nombre ||
+          user.email?.split('@')[0] || 'Usuario'
+        await supabase.from('profiles')
+          .insert({ id: user.id, nombre, moneda_default: 'HNL', onboarding_completado: false })
+
+        // Redirigir al onboarding
+        router.push('/onboarding')
+        return
+      }
+
+      // Si tiene perfil pero no completó el onboarding
+      if (profile && !profile.onboarding_completado) {
+        router.push('/onboarding')
+        return
+      }
+
       setUsuario(profile)
       setLoading(false)
     }
