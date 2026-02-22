@@ -63,14 +63,15 @@ export default function GraficaGastos({ transacciones }: Props) {
             ))}
           </Pie>
           <Tooltip
-            formatter={(value: number | undefined) =>
-              value !== undefined ? [`L ${formatMonto(value)}`, 'Monto'] : ['', 'Monto']
-            }
-            contentStyle={{
-              backgroundColor: '#1E293B',
-              border: '1px solid #334155',
-            }}
-          />
+  formatter={(value) => {
+    const numValue = typeof value === 'number' ? value : 0;
+    return [`L ${formatMonto(numValue)}`, 'Monto'];
+  }}
+  contentStyle={{
+    backgroundColor: '#1E293B',
+    border: '1px solid #334155',
+  }}
+/>
         </PieChart>
       </ResponsiveContainer>
 
