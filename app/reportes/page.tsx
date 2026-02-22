@@ -91,7 +91,7 @@ export default function Reportes() {
   })()
 
   // ── Datos para dona de categorías ──
-  const COLORES = ['#0D9488','#3B82F6','#8B5CF6','#F59E0B','#EF4444','#EC4899']
+  const COLORES = ['#0D9488', '#3B82F6', '#8B5CF6', '#F59E0B', '#EF4444', '#EC4899']
 
   // ── Totales generales ──
   const totalIngresos = transacciones
@@ -161,11 +161,10 @@ export default function Reportes() {
               <button
                 key={op.valor}
                 onClick={() => setPeriodo(op.valor)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                  periodo === op.valor
-                    ? 'bg-teal-500/20 text-teal-400 border border-teal-500/30'
-                    : 'text-slate-500 hover:text-white'
-                }`}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${periodo === op.valor
+                  ? 'bg-teal-500/20 text-teal-400 border border-teal-500/30'
+                  : 'text-slate-500 hover:text-white'
+                  }`}
               >
                 {op.label}
               </button>
@@ -189,9 +188,8 @@ export default function Reportes() {
           </div>
           <div className="p-5 border bg-slate-900 border-slate-800 rounded-2xl">
             <p className="mb-2 text-xs text-slate-500">Tasa de ahorro</p>
-            <p className={`text-xl font-bold ${
-              parseFloat(tasaAhorro) >= 0 ? 'text-teal-400' : 'text-red-400'
-            }`}>
+            <p className={`text-xl font-bold ${parseFloat(tasaAhorro) >= 0 ? 'text-teal-400' : 'text-red-400'
+              }`}>
               {tasaAhorro}%
             </p>
           </div>
@@ -216,8 +214,8 @@ export default function Reportes() {
                 <XAxis dataKey="label" tick={{ fill: '#64748B', fontSize: 11 }} axisLine={{ stroke: '#1E293B' }} />
                 <YAxis tick={{ fill: '#64748B', fontSize: 11 }} axisLine={{ stroke: '#1E293B' }} tickFormatter={(v) => `L${formatMonto(v)}`} width={75} />
                 <Tooltip
-                  formatter={(value: number, name: string) => [
-                    `L ${formatMontoCompleto(value)}`,
+                  formatter={(value: number | undefined, name: string | undefined) => [
+                    `L ${formatMontoCompleto(Number(value) || 0)}`,
                     name === 'ingresos' ? '💰 Ingresos' : name === 'gastos' ? '💸 Gastos' : '💧 Ahorro'
                   ]}
                   contentStyle={{ backgroundColor: '#1E293B', border: '1px solid #334155', borderRadius: '12px', color: '#F1F5F9' }}
@@ -288,7 +286,7 @@ export default function Reportes() {
                 <XAxis dataKey="nombre" tick={{ fill: '#64748B', fontSize: 11 }} axisLine={{ stroke: '#1E293B' }} />
                 <YAxis tick={{ fill: '#64748B', fontSize: 10 }} axisLine={{ stroke: '#1E293B' }} tickFormatter={(v) => `L${formatMonto(v)}`} width={65} />
                 <Tooltip
-                  formatter={(value: number) => [`L ${formatMontoCompleto(value)}`, 'Gastos']}
+                  formatter={(value: number | undefined) => [`L ${formatMontoCompleto(Number(value) || 0)}`, 'Gastos']}
                   contentStyle={{ backgroundColor: '#1E293B', border: '1px solid #334155', borderRadius: '12px', color: '#F1F5F9' }}
                 />
                 <Bar dataKey="total" radius={[4, 4, 0, 0]}>
