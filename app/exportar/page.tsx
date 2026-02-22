@@ -15,7 +15,7 @@ export default function Exportar() {
     return user?.id
   }
 
-  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'
+  const BACKEND_URL = (process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000').replace(/\/$/, '')
 
   const exportarExcel = async () => {
     setLoadingExcel(true)
