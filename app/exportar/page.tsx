@@ -15,6 +15,8 @@ export default function Exportar() {
     return user?.id
   }
 
+  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'
+
   const exportarExcel = async () => {
     setLoadingExcel(true)
     setMensaje('')
@@ -22,7 +24,7 @@ export default function Exportar() {
     if (!userId) return
 
     try {
-      const url = `http://localhost:8000/exportar/excel?user_id=${userId}&mes=${mes}`
+      const url = `${BACKEND_URL}/exportar/excel?user_id=${userId}&mes=${mes}`
       const response = await fetch(url)
 
       if (!response.ok) {
@@ -50,7 +52,7 @@ export default function Exportar() {
     if (!userId) return
 
     try {
-      const url = `http://localhost:8000/exportar/pdf?user_id=${userId}&mes=${mes}`
+      const url = `${BACKEND_URL}/exportar/pdf?user_id=${userId}&mes=${mes}`
       const response = await fetch(url)
       const blob = await response.blob()
       const link = document.createElement('a')
