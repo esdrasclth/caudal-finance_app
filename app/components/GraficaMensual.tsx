@@ -26,8 +26,8 @@ export default function GraficaMensual({ transacciones }: Props) {
   if (ingresos === 0 && gastos === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
-        <span className="text-4xl mb-3">📈</span>
-        <p className="text-slate-400 text-sm">Sin datos para mostrar</p>
+        <span className="mb-3 text-4xl">📈</span>
+        <p className="text-sm text-slate-400">Sin datos para mostrar</p>
       </div>
     )
   }
@@ -49,7 +49,7 @@ export default function GraficaMensual({ transacciones }: Props) {
     width={75}
   />
   <Tooltip
-    formatter={(value: number) => [`L ${formatMonto(value)}`]}
+    formatter={(value: number | undefined) => [`L ${formatMonto(Number(value) || 0)}`]}
     contentStyle={{
       backgroundColor: '#1E293B',
       border: '1px solid #334155',
