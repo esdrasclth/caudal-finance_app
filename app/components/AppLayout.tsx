@@ -13,6 +13,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const checkUser = async () => {
       const { data: { session } } = await supabase.auth.getSession()
+      console.log('Session encontrada:', !!session)
+      console.log('Session data:', session?.user?.email)
+
       if (!session) { router.push('/login'); return }
 
       const user = session.user
