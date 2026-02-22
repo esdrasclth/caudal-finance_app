@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../lib/supabase'
 
-
 interface Props {
   onClose: () => void
   onSuccess: () => void
@@ -34,7 +33,6 @@ export default function FormTransaccion({ onClose, onSuccess }: Props) {
       setWalletDestinoId('')
     }
   }, [walletId, wallets])
-
 
   const cargarDatos = async () => {
     const { data: { user } } = await supabase.auth.getUser()
@@ -97,7 +95,6 @@ export default function FormTransaccion({ onClose, onSuccess }: Props) {
         return
       }
 
-      // Buscar o crear categoría de transferencia
       let { data: catTransfer } = await supabase
         .from('categories')
         .select('id')
@@ -123,7 +120,6 @@ export default function FormTransaccion({ onClose, onSuccess }: Props) {
         catId = newCat?.id
       }
 
-      // Registrar salida
       const { error: e1 } = await supabase.from('transactions').insert({
         user_id: user.id,
         wallet_id: walletId,
@@ -135,7 +131,6 @@ export default function FormTransaccion({ onClose, onSuccess }: Props) {
         wallet_destino_id: walletDestinoId
       })
 
-      // Registrar entrada
       const { error: e2 } = await supabase.from('transactions').insert({
         user_id: user.id,
         wallet_id: walletDestinoId,
@@ -200,28 +195,16 @@ export default function FormTransaccion({ onClose, onSuccess }: Props) {
 
           {/* Tipo */}
           <div className="grid grid-cols-3 gap-2 p-1 bg-slate-900/50 rounded-xl">
-            <button
-              type="button"
-              onClick={() => { setTipo('gasto'); setCategoriaId('') }}
-              className={`py-2.5 rounded-lg text-sm font-medium transition-all ${tipo === 'gasto' ? 'bg-red-500 text-white' : 'text-slate-400 hover:text-white'
-                }`}
-            >
+            <button type="button" onClick={() => { setTipo('gasto'); setCategoriaId('') }}
+              className={`py-2.5 rounded-lg text-sm font-medium transition-all ${tipo === 'gasto' ? 'bg-red-500 text-white' : 'text-slate-400 hover:text-white'}`}>
               💸 Gasto
             </button>
-            <button
-              type="button"
-              onClick={() => { setTipo('ingreso'); setCategoriaId('') }}
-              className={`py-2.5 rounded-lg text-sm font-medium transition-all ${tipo === 'ingreso' ? 'bg-green-500 text-white' : 'text-slate-400 hover:text-white'
-                }`}
-            >
+            <button type="button" onClick={() => { setTipo('ingreso'); setCategoriaId('') }}
+              className={`py-2.5 rounded-lg text-sm font-medium transition-all ${tipo === 'ingreso' ? 'bg-green-500 text-white' : 'text-slate-400 hover:text-white'}`}>
               💰 Ingreso
             </button>
-            <button
-              type="button"
-              onClick={() => { setTipo('transferencia'); setCategoriaId('') }}
-              className={`py-2.5 rounded-lg text-sm font-medium transition-all ${tipo === 'transferencia' ? 'bg-blue-500 text-white' : 'text-slate-400 hover:text-white'
-                }`}
-            >
+            <button type="button" onClick={() => { setTipo('transferencia'); setCategoriaId('') }}
+              className={`py-2.5 rounded-lg text-sm font-medium transition-all ${tipo === 'transferencia' ? 'bg-blue-500 text-white' : 'text-slate-400 hover:text-white'}`}>
               ↔️ Mover
             </button>
           </div>
@@ -229,38 +212,23 @@ export default function FormTransaccion({ onClose, onSuccess }: Props) {
           {/* Monto */}
           <div>
             <label className="block mb-2 text-sm font-medium text-slate-300">Monto (HNL)</label>
-            <div className="relative">
-              <span className="absolute font-medium -translate-y-1/2 left-4 top-1/2 text-slate-400">L</span>
-              {/* Monto — display grande estilo calculadora */}
-              <div>
-                <label className="block mb-2 text-sm font-medium text-slate-300">Monto (HNL)</label>
-                <div
-                  className="relative cursor-text"
-                  onClick={() => montoRef.current?.focus()}
-                >
-                  <span className="absolute text-xl font-medium -translate-y-1/2 left-4 top-1/2 text-slate-400">L</span>
-                  <input
-                    ref={montoRef}
-                    type="number"
-                    inputMode="decimal"
-                    value={monto}
-                    onChange={(e) => setMonto(e.target.value)}
-                    placeholder="0.00"
-                    min="0.01"
-                    step="0.01"
-                    required
-                    className="w-full py-4 pl-10 pr-4 text-2xl font-bold text-white transition-colors border bg-slate-900/50 border-slate-600 placeholder-slate-700 rounded-xl focus:outline-none focus:border-teal-500"
-                  />
-                </div>
-                {/* Botón para abrir teclado en móvil */}
-                <button
-                  type="button"
-                  onClick={() => montoRef.current?.focus()}
-                  className="w-full py-2 mt-2 text-xs text-teal-400 border border-teal-500/20 rounded-xl bg-teal-500/5 lg:hidden"
-                >
-                  Toca aquí para ingresar el monto 💰
-                </button>
-              </div>
+            <div
+              className="relative cursor-text"
+              onClick={() => montoRef.current?.focus()}
+            >
+              <span className="absolute text-xl font-medium -translate-y-1/2 left-4 top-1/2 text-slate-400">L</span>
+              <input
+                ref={montoRef}
+                type="number"
+                inputMode="decimal"
+                value={monto}
+                onChange={(e) => setMonto(e.target.value)}
+                placeholder="0.00"
+                min="0.01"
+                step="0.01"
+                required
+                className="w-full py-4 pl-10 pr-4 text-2xl font-bold text-white transition-colors border bg-slate-900/50 border-slate-600 placeholder-slate-700 rounded-xl focus:outline-none focus:border-teal-500"
+              />
             </div>
           </div>
 
@@ -278,39 +246,24 @@ export default function FormTransaccion({ onClose, onSuccess }: Props) {
             />
           </div>
 
-          {/* Transferencia — cuentas */}
+          {/* Transferencia */}
           {tipo === 'transferencia' ? (
             <div className="p-4 space-y-4 border bg-blue-500/5 border-blue-500/20 rounded-xl">
               <p className="text-sm font-medium text-blue-400">↔️ Mover dinero entre cuentas</p>
-
               <div>
                 <label className="block mb-2 text-sm font-medium text-slate-300">Desde</label>
-                <select
-                  value={walletId}
-                  onChange={(e) => {
-                    setWalletId(e.target.value)
-                    setWalletDestinoId('')
-                  }}
-                  className="w-full px-4 py-3 text-white transition-colors border bg-slate-900/50 border-slate-600 rounded-xl focus:outline-none focus:border-teal-500"
-                >
-                  {wallets.map(w => (
-                    <option key={w.id} value={w.id}>{w.nombre}</option>
-                  ))}
+                <select value={walletId} onChange={(e) => { setWalletId(e.target.value); setWalletDestinoId('') }}
+                  className="w-full px-4 py-3 text-white transition-colors border bg-slate-900/50 border-slate-600 rounded-xl focus:outline-none focus:border-teal-500">
+                  {wallets.map(w => <option key={w.id} value={w.id}>{w.nombre}</option>)}
                 </select>
               </div>
-
               <div className="flex justify-center text-2xl text-blue-400">↓</div>
-
               <div>
                 <label className="block mb-2 text-sm font-medium text-slate-300">Hacia</label>
-                <select
-                  value={walletDestinoId}
-                  onChange={(e) => setWalletDestinoId(e.target.value)}
-                  className="w-full px-4 py-3 text-white transition-colors border bg-slate-900/50 border-slate-600 rounded-xl focus:outline-none focus:border-teal-500"
-                >
-                  {wallets.filter(w => w.id !== walletId).map(w => (
-                    <option key={w.id} value={w.id}>{w.nombre}</option>
-                  ))}
+                <select value={walletDestinoId} onChange={(e) => setWalletDestinoId(e.target.value)}
+                  className="w-full px-4 py-3 text-white transition-colors border bg-slate-900/50 border-slate-600 rounded-xl focus:outline-none focus:border-teal-500">
+                  <option value="">— Selecciona cuenta —</option>
+                  {wallets.filter(w => w.id !== walletId).map(w => <option key={w.id} value={w.id}>{w.nombre}</option>)}
                 </select>
               </div>
             </div>
@@ -321,15 +274,8 @@ export default function FormTransaccion({ onClose, onSuccess }: Props) {
                 <label className="block mb-2 text-sm font-medium text-slate-300">Categoría</label>
                 <div className="grid grid-cols-3 gap-2 overflow-y-auto max-h-44">
                   {categoriasPrincipales.map(cat => (
-                    <button
-                      key={cat.id}
-                      type="button"
-                      onClick={() => setCategoriaId(cat.id)}
-                      className={`p-2.5 rounded-xl text-xs text-center transition-all border ${categoriaId === cat.id
-                        ? 'border-teal-500 bg-teal-500/10 text-teal-300'
-                        : 'border-slate-600 text-slate-400 hover:border-slate-500'
-                        }`}
-                    >
+                    <button key={cat.id} type="button" onClick={() => setCategoriaId(cat.id)}
+                      className={`p-2.5 rounded-xl text-xs text-center transition-all border ${categoriaId === cat.id ? 'border-teal-500 bg-teal-500/10 text-teal-300' : 'border-slate-600 text-slate-400 hover:border-slate-500'}`}>
                       <div className="mb-1 text-lg">{cat.icono || '📦'}</div>
                       <div className="leading-tight">{cat.nombre}</div>
                     </button>
@@ -345,15 +291,8 @@ export default function FormTransaccion({ onClose, onSuccess }: Props) {
                   </label>
                   <div className="grid grid-cols-3 gap-2 overflow-y-auto max-h-36">
                     {subcategorias.map(sub => (
-                      <button
-                        key={sub.id}
-                        type="button"
-                        onClick={() => setSubcategoriaId(sub.id)}
-                        className={`p-2.5 rounded-xl text-xs text-center transition-all border ${subcategoriaId === sub.id
-                          ? 'border-teal-500 bg-teal-500/10 text-teal-300'
-                          : 'border-slate-600 text-slate-400 hover:border-slate-500'
-                          }`}
-                      >
+                      <button key={sub.id} type="button" onClick={() => setSubcategoriaId(sub.id)}
+                        className={`p-2.5 rounded-xl text-xs text-center transition-all border ${subcategoriaId === sub.id ? 'border-teal-500 bg-teal-500/10 text-teal-300' : 'border-slate-600 text-slate-400 hover:border-slate-500'}`}>
                         <div className="mb-1 text-lg">{sub.icono || '📦'}</div>
                         <div className="leading-tight">{sub.nombre}</div>
                       </button>
@@ -365,17 +304,9 @@ export default function FormTransaccion({ onClose, onSuccess }: Props) {
               {/* Cartera */}
               <div>
                 <label className="block mb-2 text-sm font-medium text-slate-300">Cartera</label>
-                <select
-                  value={walletId}
-                  onChange={(e) => {
-                    setWalletId(e.target.value)
-                    setWalletDestinoId('')
-                  }}
-                  className="w-full px-4 py-3 text-white transition-colors border bg-slate-900/50 border-slate-600 rounded-xl focus:outline-none focus:border-teal-500"
-                >
-                  {wallets.map(w => (
-                    <option key={w.id} value={w.id}>{w.nombre}</option>
-                  ))}
+                <select value={walletId} onChange={(e) => { setWalletId(e.target.value); setWalletDestinoId('') }}
+                  className="w-full px-4 py-3 text-white transition-colors border bg-slate-900/50 border-slate-600 rounded-xl focus:outline-none focus:border-teal-500">
+                  {wallets.map(w => <option key={w.id} value={w.id}>{w.nombre}</option>)}
                 </select>
               </div>
             </>
@@ -384,12 +315,8 @@ export default function FormTransaccion({ onClose, onSuccess }: Props) {
           {/* Fecha */}
           <div>
             <label className="block mb-2 text-sm font-medium text-slate-300">Fecha</label>
-            <input
-              type="date"
-              value={fecha}
-              onChange={(e) => setFecha(e.target.value)}
-              className="w-full px-4 py-3 text-white transition-colors border bg-slate-900/50 border-slate-600 rounded-xl focus:outline-none focus:border-teal-500"
-            />
+            <input type="date" value={fecha} onChange={(e) => setFecha(e.target.value)}
+              className="w-full px-4 py-3 text-white transition-colors border bg-slate-900/50 border-slate-600 rounded-xl focus:outline-none focus:border-teal-500" />
           </div>
 
           {error && (
@@ -399,21 +326,12 @@ export default function FormTransaccion({ onClose, onSuccess }: Props) {
           )}
 
           <div className="grid grid-cols-2 gap-3 pt-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="py-3 font-medium transition-all border rounded-xl border-slate-600 text-slate-400 hover:text-white"
-            >
+            <button type="button" onClick={onClose}
+              className="py-3 font-medium transition-all border rounded-xl border-slate-600 text-slate-400 hover:text-white">
               Cancelar
             </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className={`py-3 rounded-xl text-white font-medium transition-all disabled:opacity-50 ${tipo === 'transferencia' ? 'bg-blue-500 hover:bg-blue-400' :
-                tipo === 'ingreso' ? 'bg-green-500 hover:bg-green-400' :
-                  'bg-teal-500 hover:bg-teal-400'
-                }`}
-            >
+            <button type="submit" disabled={loading}
+              className={`py-3 rounded-xl text-white font-medium transition-all disabled:opacity-50 ${tipo === 'transferencia' ? 'bg-blue-500 hover:bg-blue-400' : tipo === 'ingreso' ? 'bg-green-500 hover:bg-green-400' : 'bg-teal-500 hover:bg-teal-400'}`}>
               {loading ? 'Guardando...' : tipo === 'transferencia' ? 'Mover dinero' : 'Guardar'}
             </button>
           </div>
