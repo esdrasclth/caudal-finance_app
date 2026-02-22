@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import FormTransaccion from '../components/FormTransaccion'
 import AppLayout from '../components/AppLayout'
 import FormEditarTransaccion from '../components/FormEditarTransaccion'
+import { SkeletonGrupoFecha } from '../components/Skeleton'
 
 export default function Transacciones() {
   const router = useRouter()
@@ -147,16 +148,26 @@ const { data: trans, error } = await supabase
     })
   }
 
-  if (loading) {
-    return (
-      <main className="flex items-center justify-center min-h-screen bg-slate-900">
-        <div className="text-center">
-          <span className="text-4xl">💧</span>
-          <p className="mt-3 text-teal-400 animate-pulse">Cargando...</p>
+ if (loading) {
+  return (
+    <AppLayout>
+      <div className="max-w-4xl px-6 py-8 mx-auto space-y-6">
+        <div className="flex items-center justify-between">
+          <div className="w-40 h-10 bg-slate-800 rounded-xl animate-pulse" />
+          <div className="w-32 h-6 rounded bg-slate-800 animate-pulse" />
         </div>
-      </main>
-    )
-  }
+        <div className="p-4 space-y-3 border bg-slate-800/50 border-slate-700 rounded-2xl animate-pulse">
+          <div className="h-10 bg-slate-800 rounded-xl" />
+          <div className="grid grid-cols-2 gap-3">
+            <div className="h-10 bg-slate-800 rounded-xl" />
+            <div className="h-10 bg-slate-800 rounded-xl" />
+          </div>
+        </div>
+        <SkeletonGrupoFecha />
+      </div>
+    </AppLayout>
+  )
+}
 
   return (
     <AppLayout>

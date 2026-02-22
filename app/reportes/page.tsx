@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { useRouter } from 'next/navigation'
 import AppLayout from '../components/AppLayout'
+import { SkeletonChart, SkeletonList } from '../components/Skeleton'
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   CartesianGrid, PieChart, Pie, Cell, LineChart, Line, Legend
@@ -132,8 +133,21 @@ export default function Reportes() {
   if (loading) {
     return (
       <AppLayout>
-        <div className="flex items-center justify-center h-96">
-          <p className="text-teal-400 animate-pulse">Calculando reportes...</p>
+        <div className="max-w-6xl px-6 py-8 mx-auto space-y-6">
+          <div className="w-48 h-8 rounded bg-slate-800 animate-pulse" />
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+            {[1, 2, 3, 4].map(i => (
+              <div key={i} className="p-5 border bg-slate-900 border-slate-800 rounded-2xl animate-pulse">
+                <div className="w-2/3 h-3 mb-4 rounded bg-slate-800" />
+                <div className="w-1/2 rounded h-7 bg-slate-800" />
+              </div>
+            ))}
+          </div>
+          <SkeletonChart />
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <SkeletonList items={4} />
+            <SkeletonChart />
+          </div>
         </div>
       </AppLayout>
     )

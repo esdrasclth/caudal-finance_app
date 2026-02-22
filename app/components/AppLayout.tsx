@@ -41,13 +41,45 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-900">
-        <div className="text-center">
-          <div className="flex items-center justify-center w-12 h-12 mx-auto mb-3 text-2xl bg-teal-500 rounded-xl">
-            💧
+      <div className="min-h-screen bg-slate-950">
+        <div className="fixed top-0 left-0 hidden w-64 min-h-screen border-r bg-slate-900 border-slate-800 lg:block animate-pulse">
+          <div className="p-6 border-b border-slate-800">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 bg-slate-800 rounded-xl" />
+              <div className="space-y-2">
+                <div className="w-16 h-3 rounded bg-slate-800" />
+                <div className="w-24 h-2 rounded bg-slate-800" />
+              </div>
+            </div>
           </div>
-          <p className="text-sm text-teal-400 animate-pulse">Cargando Caudal...</p>
+          <div className="p-4 mx-3 mt-4 bg-slate-800/50 rounded-xl">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-slate-800" />
+              <div className="space-y-2">
+                <div className="w-24 h-3 rounded bg-slate-800" />
+                <div className="w-16 h-2 rounded bg-slate-800" />
+              </div>
+            </div>
+          </div>
+          <div className="p-4 mt-2 space-y-2">
+            {[1, 2, 3, 4, 5, 6].map(i => (
+              <div key={i} className="h-10 bg-slate-800/50 rounded-xl" />
+            ))}
+          </div>
         </div>
+        <main className="pb-20 lg:ml-64 lg:pb-0">
+          <div className="max-w-6xl p-6 mx-auto space-y-6 lg:p-8">
+            <div className="w-48 h-8 rounded bg-slate-800 animate-pulse" />
+            <div className="grid grid-cols-3 gap-4">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="p-6 border bg-slate-900 border-slate-800 rounded-2xl animate-pulse">
+                  <div className="w-2/3 h-3 mb-4 rounded bg-slate-800" />
+                  <div className="w-1/2 h-8 rounded bg-slate-800" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </main>
       </div>
     )
   }

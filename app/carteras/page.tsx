@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import FormCartera from '../components/FormCartera'
 import AppLayout from '../components/AppLayout'
 import AjusteSaldo from '../components/AjusteSaldo'
+import { SkeletonCard } from '../components/Skeleton'
 
 export default function Carteras() {
   const router = useRouter()
@@ -84,16 +85,28 @@ const handleEliminar = async (id: string) => {
     ahorro: '🏆'
   }
 
-  if (loading) {
-    return (
-      <main className="flex items-center justify-center min-h-screen bg-slate-900">
-        <div className="text-center">
-          <span className="text-4xl">💧</span>
-          <p className="mt-3 text-teal-400 animate-pulse">Cargando...</p>
+if (loading) {
+  return (
+    <AppLayout>
+      <div className="max-w-4xl px-6 py-8 mx-auto space-y-6">
+        <div className="w-48 h-8 rounded bg-slate-800 animate-pulse" />
+        <div className="grid grid-cols-2 gap-4">
+          <div className="p-6 border bg-slate-900 border-slate-800 rounded-2xl animate-pulse">
+            <div className="w-2/3 h-3 mb-4 rounded bg-slate-800" />
+            <div className="w-1/2 h-8 rounded bg-slate-800" />
+          </div>
+          <div className="p-6 border bg-slate-900 border-slate-800 rounded-2xl animate-pulse">
+            <div className="w-2/3 h-3 mb-4 rounded bg-slate-800" />
+            <div className="w-1/2 h-8 rounded bg-slate-800" />
+          </div>
         </div>
-      </main>
-    )
-  }
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {[1,2,3,4].map(i => <SkeletonCard key={i} />)}
+        </div>
+      </div>
+    </AppLayout>
+  )
+}
 
   return (
     <AppLayout>

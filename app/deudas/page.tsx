@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase'
 import { useRouter } from 'next/navigation'
 import AppLayout from '../components/AppLayout'
 import FormDeuda from '../components/FormDeuda'
+import { SkeletonList } from '../components/Skeleton'
 
 export default function Deudas() {
   const router = useRouter()
@@ -74,8 +75,17 @@ export default function Deudas() {
   if (loading) {
     return (
       <AppLayout>
-        <div className="flex items-center justify-center h-96">
-          <p className="text-teal-400 animate-pulse">Cargando...</p>
+        <div className="max-w-4xl px-6 py-8 mx-auto space-y-6">
+          <div className="w-48 h-8 rounded bg-slate-800 animate-pulse" />
+          <div className="grid grid-cols-2 gap-4">
+            {[1, 2].map(i => (
+              <div key={i} className="p-6 border bg-slate-900 border-slate-800 rounded-2xl animate-pulse">
+                <div className="w-2/3 h-3 mb-4 rounded bg-slate-800" />
+                <div className="w-1/2 h-8 rounded bg-slate-800" />
+              </div>
+            ))}
+          </div>
+          <SkeletonList items={3} />
         </div>
       </AppLayout>
     )
@@ -125,11 +135,10 @@ export default function Deudas() {
             <button
               key={op.valor}
               onClick={() => setFiltro(op.valor as any)}
-              className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${
-                filtro === op.valor
+              className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${filtro === op.valor
                   ? 'bg-teal-500/20 text-teal-400 border border-teal-500/30'
                   : 'text-slate-500 hover:text-white'
-              }`}
+                }`}
             >
               {op.label}
             </button>
@@ -157,21 +166,19 @@ export default function Deudas() {
               return (
                 <div
                   key={deuda.id}
-                  className={`bg-slate-900 border rounded-2xl p-6 transition-all ${
-                    deuda.completada
+                  className={`bg-slate-900 border rounded-2xl p-6 transition-all ${deuda.completada
                       ? 'border-slate-800 opacity-60'
                       : vencida
-                      ? 'border-red-500/50'
-                      : 'border-slate-800 hover:border-slate-600'
-                  }`}
+                        ? 'border-red-500/50'
+                        : 'border-slate-800 hover:border-slate-600'
+                    }`}
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl ${
-                        deuda.tipo === 'debo'
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl ${deuda.tipo === 'debo'
                           ? 'bg-red-500/10'
                           : 'bg-green-500/10'
-                      }`}>
+                        }`}>
                         {deuda.tipo === 'debo' ? '💸' : '💰'}
                       </div>
                       <div>
@@ -197,11 +204,10 @@ export default function Deudas() {
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleCompletar(deuda)}
-                        className={`text-xs px-2 py-1 rounded-lg border transition-all ${
-                          deuda.completada
+                        className={`text-xs px-2 py-1 rounded-lg border transition-all ${deuda.completada
                             ? 'border-slate-600 text-slate-500 hover:text-white'
                             : 'border-teal-500/30 text-teal-400 hover:bg-teal-500/10'
-                        }`}
+                          }`}
                       >
                         {deuda.completada ? 'Reabrir' : '✓ Completar'}
                       </button>
@@ -236,9 +242,8 @@ export default function Deudas() {
                     </div>
                     <div>
                       <p className="mb-1 text-xs text-slate-500">Pendiente</p>
-                      <p className={`font-semibold ${
-                        deuda.tipo === 'debo' ? 'text-red-400' : 'text-green-400'
-                      }`}>
+                      <p className={`font-semibold ${deuda.tipo === 'debo' ? 'text-red-400' : 'text-green-400'
+                        }`}>
                         L {formatMonto(pendiente)}
                       </p>
                     </div>
