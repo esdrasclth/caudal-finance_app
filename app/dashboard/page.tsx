@@ -18,6 +18,7 @@ export default function Dashboard() {
   const [resumen, setResumen] = useState({ ingresos: 0, gastos: 0 })
   const [loading, setLoading] = useState(true)
   const [vistaGrafica, setVistaGrafica] = useState<'gasto' | 'ingreso'>('gasto')
+  const [mesOffset, setMesOffset] = useState(0) // 0 = mes actual, -1 = mes anterior
 
   useEffect(() => {
     const init = async () => {
@@ -32,29 +33,27 @@ export default function Dashboard() {
     init()
   }, [router])
 
+  useEffect(() => {
+    cargarTransacciones()
+  }, [mesOffset])
+
   const cargarTransacciones = async () => {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return
 
-    const inicioMes = new Date()
-    inicioMes.setDate(1)
-    const inicioStr = inicioMes.toISOString().split('T')[0]
+    const { inicio, fin } = getMesRango()
 
     const { data } = await supabase
       .from('transactions')
       .select('*, categories(nombre, icono, color)')
       .eq('user_id', user.id)
-      .gte('fecha', inicioStr)
+      .gte('fecha', inicio)
+      .lte('fecha', fin)
       .order('fecha', { ascending: false })
 
     setTransacciones(data || [])
-
-    const ingresos = (data || [])
-      .filter(t => t.tipo === 'ingreso')
-      .reduce((sum, t) => sum + Number(t.monto), 0)
-    const gastos = (data || [])
-      .filter(t => t.tipo === 'gasto')
-      .reduce((sum, t) => sum + Number(t.monto), 0)
+    const ingresos = (data || []).filter(t => t.tipo === 'ingreso').reduce((sum, t) => sum + Number(t.monto), 0)
+    const gastos = (data || []).filter(t => t.tipo === 'gasto').reduce((sum, t) => sum + Number(t.monto), 0)
     setResumen({ ingresos, gastos })
   }
 
@@ -68,9 +67,25 @@ export default function Dashboard() {
     return 'Buenas noches'
   }
 
-  const mesNombre = new Date().toLocaleDateString('es-HN', {
+  const getMesActual = () => {
+    const fecha = new Date()
+    fecha.setMonth(fecha.getMonth() + mesOffset)
+    return fecha
+  }
+
+  const mesNombre = getMesActual().toLocaleDateString('es-HN', {
     month: 'long', year: 'numeric'
   })
+
+  const getMesRango = () => {
+    const fecha = getMesActual()
+    const inicio = new Date(fecha.getFullYear(), fecha.getMonth(), 1)
+    const fin = new Date(fecha.getFullYear(), fecha.getMonth() + 1, 0)
+    return {
+      inicio: inicio.toISOString().split('T')[0],
+      fin: fin.toISOString().split('T')[0]
+    }
+  }
 
   if (loading) {
     return (
@@ -136,6 +151,37 @@ export default function Dashboard() {
             </p>
             <p className="mt-1 text-xs text-slate-600">Ingresos - Gastos</p>
           </div>
+        </div>
+
+        {/* Navegador de mes */}
+        <div className="flex items-center justify-between px-4 py-3 mb-6 border bg-slate-900 border-slate-800 rounded-2xl">
+          <button
+            onClick={() => setMesOffset(mesOffset - 1)}
+            className="flex items-center justify-center transition-all w-9 h-9 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl"
+          >
+            ←
+          </button>
+          <div className="text-center">
+            <p className="font-medium text-white capitalize">{mesNombre}</p>
+            {mesOffset !== 0 && (
+              <button
+                onClick={() => setMesOffset(0)}
+                className="text-xs text-teal-400 transition-colors hover:text-teal-300"
+              >
+                Volver al mes actual
+              </button>
+            )}
+          </div>
+          <button
+            onClick={() => setMesOffset(Math.min(0, mesOffset + 1))}
+            className={`w-9 h-9 flex items-center justify-center rounded-xl transition-all ${mesOffset === 0
+                ? 'text-slate-700 cursor-not-allowed'
+                : 'text-slate-400 hover:text-white hover:bg-slate-800'
+              }`}
+            disabled={mesOffset === 0}
+          >
+            →
+          </button>
         </div>
 
         {/* Gráficas */}
