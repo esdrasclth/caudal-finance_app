@@ -240,7 +240,7 @@ export default function Presupuesto() {
       {/* Botón flotante */}
       <button
         onClick={() => { setPresupuestoEditar(null); setShowForm(true) }}
-        className="fixed flex items-center justify-center text-2xl text-white transition-all bg-teal-500 rounded-full shadow-lg bottom-24 right-8 hover:bg-teal-400 w-14 h-14 shadow-teal-500/25 hover:scale-110"
+        className="fixed z-40 flex items-center justify-center text-2xl text-white transition-all bg-teal-500 rounded-full shadow-lg bottom-24 lg:bottom-8 right-6 lg:right-8 w-14 h-14 hover:bg-teal-400 shadow-teal-500/30 hover:scale-110"
       >
         +
       </button>
