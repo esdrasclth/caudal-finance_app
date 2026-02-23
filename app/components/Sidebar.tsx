@@ -43,6 +43,7 @@ function MasMenu({ pathname, router }: { pathname: string, router: any }) {
       {/* Panel de más opciones */}
       {abierto && (
         <div className="fixed z-50 w-48 overflow-hidden border shadow-xl bottom-16 right-2 bg-slate-800 border-slate-700 rounded-2xl">
+          
           {MAS_ITEMS.map(item => {
             const activo = pathname === item.href
             return (

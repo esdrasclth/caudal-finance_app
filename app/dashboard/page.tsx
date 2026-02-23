@@ -8,6 +8,7 @@ import GraficaGastos from '../components/GraficaGastos'
 import GraficaMensual from '../components/GraficaMensual'
 import FormTransaccion from '../components/FormTransaccion'
 import { SkeletonStats, SkeletonChart, SkeletonList } from '../components/Skeleton'
+import Notificaciones from '../components/Notificaciones'
 
 export default function Dashboard() {
   const router = useRouter()
@@ -94,11 +95,14 @@ export default function Dashboard() {
       <div className="max-w-6xl p-6 mx-auto lg:p-8">
 
         {/* Header */}
-        <div className="mb-8">
-          <p className="mb-1 text-sm capitalize text-slate-500">{mesNombre}</p>
-          <h1 className="text-3xl font-bold text-white">
-            {saludo()}, {usuario?.nombre?.split(' ')[0]} 👋
-          </h1>
+        <div className="flex items-start justify-between mb-8">
+          <div>
+            <p className="mb-1 text-sm capitalize text-slate-500">{mesNombre}</p>
+            <h1 className="text-3xl font-bold text-white">
+              {saludo()}, {usuario?.nombre?.split(' ')[0]} 👋
+            </h1>
+          </div>
+          <Notificaciones />
         </div>
 
         {/* Cards resumen */}
