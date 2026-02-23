@@ -152,7 +152,7 @@ export default function Dashboard() {
             />
           </div>
           <div className="flex flex-col p-6 border bg-slate-900 border-slate-800 rounded-2xl">
-            <h2 className="mb-1 font-semibold text-white">Movimientos diarios</h2>
+            <h2 className="mb-1 font-semibold text-white">Movimientos Mensuales</h2>
             <p className="mb-4 text-xs text-slate-500">Ingresos vs Gastos</p>
             <GraficaMensual transacciones={transacciones} />
           </div>
