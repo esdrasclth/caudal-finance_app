@@ -54,26 +54,26 @@ export default function Transacciones() {
       0
     ).toISOString().split('T')[0]
 
-const { data: trans, error } = await supabase
-  .from('transactions')
-  .select(`
+    const { data: trans, error } = await supabase
+      .from('transactions')
+      .select(`
     *,
     categories(nombre, icono, color),
     wallets:wallets!transactions_wallet_id_fkey(nombre, color)
   `)
-  .eq('user_id', user.id)
-  .gte('fecha', inicioMes)
-  .lte('fecha', finMes)
-  .order('fecha', { ascending: false })
-  .order('created_at', { ascending: false })
+      .eq('user_id', user.id)
+      .gte('fecha', inicioMes)
+      .lte('fecha', finMes)
+      .order('fecha', { ascending: false })
+      .order('created_at', { ascending: false })
 
-  if (error) {
-  console.error('Error real:', error)
-  setTransacciones([])
-  setFiltradas([])
-  setLoading(false)
-  return
-}
+    if (error) {
+      console.error('Error real:', error)
+      setTransacciones([])
+      setFiltradas([])
+      setLoading(false)
+      return
+    }
 
     setTransacciones(trans || [])
     setFiltradas(trans || [])
@@ -148,26 +148,26 @@ const { data: trans, error } = await supabase
     })
   }
 
- if (loading) {
-  return (
-    <AppLayout>
-      <div className="max-w-4xl px-6 py-8 mx-auto space-y-6">
-        <div className="flex items-center justify-between">
-          <div className="w-40 h-10 bg-slate-800 rounded-xl animate-pulse" />
-          <div className="w-32 h-6 rounded bg-slate-800 animate-pulse" />
-        </div>
-        <div className="p-4 space-y-3 border bg-slate-800/50 border-slate-700 rounded-2xl animate-pulse">
-          <div className="h-10 bg-slate-800 rounded-xl" />
-          <div className="grid grid-cols-2 gap-3">
-            <div className="h-10 bg-slate-800 rounded-xl" />
-            <div className="h-10 bg-slate-800 rounded-xl" />
+  if (loading) {
+    return (
+      <AppLayout>
+        <div className="max-w-4xl px-6 py-8 mx-auto space-y-6">
+          <div className="flex items-center justify-between">
+            <div className="w-40 h-10 bg-slate-800 rounded-xl animate-pulse" />
+            <div className="w-32 h-6 rounded bg-slate-800 animate-pulse" />
           </div>
+          <div className="p-4 space-y-3 border bg-slate-800/50 border-slate-700 rounded-2xl animate-pulse">
+            <div className="h-10 bg-slate-800 rounded-xl" />
+            <div className="grid grid-cols-2 gap-3">
+              <div className="h-10 bg-slate-800 rounded-xl" />
+              <div className="h-10 bg-slate-800 rounded-xl" />
+            </div>
+          </div>
+          <SkeletonGrupoFecha />
         </div>
-        <SkeletonGrupoFecha />
-      </div>
-    </AppLayout>
-  )
-}
+      </AppLayout>
+    )
+  }
 
   return (
     <AppLayout>
@@ -222,8 +222,8 @@ const { data: trans, error } = await supabase
                   key={op.valor}
                   onClick={() => setFiltroTipo(op.valor)}
                   className={`flex-1 py-1.5 rounded-lg text-xs font-medium transition-all ${filtroTipo === op.valor
-                      ? 'bg-teal-500 text-white'
-                      : 'text-slate-400 hover:text-white'
+                    ? 'bg-teal-500 text-white'
+                    : 'text-slate-400 hover:text-white'
                     }`}
                 >
                   {op.label}
@@ -367,7 +367,7 @@ const { data: trans, error } = await supabase
       {/* Botón flotante */}
       <button
         onClick={() => setShowForm(true)}
-        className="fixed flex items-center justify-center text-2xl text-white transition-all bg-teal-500 rounded-full shadow-lg bottom-8 right-8 hover:bg-teal-400 w-14 h-14 shadow-teal-500/25 hover:scale-110"
+        className="fixed flex items-center justify-center text-2xl text-white transition-all bg-teal-500 rounded-full shadow-lg bottom-24 right-8 hover:bg-teal-400 w-14 h-14 shadow-teal-500/25 hover:scale-110"
       >
         +
       </button>

@@ -118,7 +118,7 @@ export default function Presupuesto() {
             <div>
               <p className="mb-1 text-xs text-slate-400">Disponible</p>
               <p className={`text-xl font-bold ${totalPresupuestado - totalGastado >= 0
-                  ? 'text-teal-400' : 'text-red-400'
+                ? 'text-teal-400' : 'text-red-400'
                 }`}>
                 L {formatMonto(totalPresupuestado - totalGastado)}
               </p>
@@ -129,8 +129,8 @@ export default function Presupuesto() {
           <div className="w-full h-3 rounded-full bg-slate-700">
             <div
               className={`h-3 rounded-full transition-all duration-500 ${totalGastado / totalPresupuestado > 1 ? 'bg-red-500' :
-                  totalGastado / totalPresupuestado > 0.8 ? 'bg-yellow-500' :
-                    'bg-teal-500'
+                totalGastado / totalPresupuestado > 0.8 ? 'bg-yellow-500' :
+                  'bg-teal-500'
                 }`}
               style={{
                 width: `${Math.min((totalGastado / totalPresupuestado) * 100 || 0, 100)}%`
@@ -163,8 +163,8 @@ export default function Presupuesto() {
                 <div
                   key={p.id}
                   className={`bg-slate-800/50 border rounded-2xl p-6 transition-all ${sobrePasado ? 'border-red-500/50' :
-                      advertencia ? 'border-yellow-500/50' :
-                        'border-slate-700'
+                    advertencia ? 'border-yellow-500/50' :
+                      'border-slate-700'
                     }`}
                 >
                   <div className="flex items-start justify-between mb-4">
@@ -211,8 +211,8 @@ export default function Presupuesto() {
                   <div className="w-full bg-slate-700 rounded-full h-2.5">
                     <div
                       className={`h-2.5 rounded-full transition-all duration-500 ${sobrePasado ? 'bg-red-500' :
-                          advertencia ? 'bg-yellow-500' :
-                            'bg-teal-500'
+                        advertencia ? 'bg-yellow-500' :
+                          'bg-teal-500'
                         }`}
                       style={{ width: `${p.porcentaje}%` }}
                     />
@@ -240,7 +240,7 @@ export default function Presupuesto() {
       {/* Botón flotante */}
       <button
         onClick={() => { setPresupuestoEditar(null); setShowForm(true) }}
-        className="fixed flex items-center justify-center text-2xl text-white transition-all bg-teal-500 rounded-full shadow-lg bottom-8 right-8 hover:bg-teal-400 w-14 h-14 shadow-teal-500/25 hover:scale-110"
+        className="fixed flex items-center justify-center text-2xl text-white transition-all bg-teal-500 rounded-full shadow-lg bottom-24 right-8 hover:bg-teal-400 w-14 h-14 shadow-teal-500/25 hover:scale-110"
       >
         +
       </button>
