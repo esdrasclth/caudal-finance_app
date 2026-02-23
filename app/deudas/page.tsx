@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import AppLayout from '../components/AppLayout'
 import FormDeuda from '../components/FormDeuda'
 import { SkeletonList } from '../components/Skeleton'
+import FormAbono from '../components/FormAbono'
 
 export default function Deudas() {
   const router = useRouter()
@@ -14,6 +15,8 @@ export default function Deudas() {
   const [showForm, setShowForm] = useState(false)
   const [deudaEditar, setDeudaEditar] = useState<any>(null)
   const [filtro, setFiltro] = useState<'todas' | 'debo' | 'me_deben'>('todas')
+  const [deudaAbonar, setDeudaAbonar] = useState<any>(null)
+  const [showAbono, setShowAbono] = useState(false)
 
   useEffect(() => {
     const checkUser = async () => {
@@ -45,10 +48,30 @@ export default function Deudas() {
     cargarDeudas()
   }
 
-  const handleCompletar = async (deuda: any) => {
-    await supabase
+  const actualizarMonto = async (id: string, monto: number) => {
+    const { data, error } = await supabase
       .from('debts')
-      .upsert({ ...deuda, completada: !deuda.completada })
+      .update({ monto_total: monto })
+      .eq('id', id)
+
+    if (error) console.error(error)
+    else console.log('Deuda actualizada', data)
+  }
+
+  const handleCompletar = async (deuda: any) => {
+    const { data, error } = await supabase
+      .from('debts')
+      .upsert({
+        id: deuda.id,
+        completada: !deuda.completada,
+        user_id: deuda.user_id // Importante incluir la PK y campos obligatorios en upsert
+      })
+
+    if (error) {
+      console.error("Error actualizando deuda:", error)
+      return
+    }
+
     cargarDeudas()
   }
 
@@ -136,8 +159,8 @@ export default function Deudas() {
               key={op.valor}
               onClick={() => setFiltro(op.valor as any)}
               className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${filtro === op.valor
-                  ? 'bg-teal-500/20 text-teal-400 border border-teal-500/30'
-                  : 'text-slate-500 hover:text-white'
+                ? 'bg-teal-500/20 text-teal-400 border border-teal-500/30'
+                : 'text-slate-500 hover:text-white'
                 }`}
             >
               {op.label}
@@ -150,9 +173,7 @@ export default function Deudas() {
           <div className="p-12 text-center border bg-slate-900 border-slate-800 rounded-2xl">
             <span className="block mb-4 text-5xl">🤝</span>
             <p className="text-slate-400">No hay deudas registradas</p>
-            <p className="mt-1 text-sm text-slate-500">
-              Agrega una con el botón +
-            </p>
+            <p className="mt-1 text-sm text-slate-500">Agrega una con el botón +</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -167,18 +188,15 @@ export default function Deudas() {
                 <div
                   key={deuda.id}
                   className={`bg-slate-900 border rounded-2xl p-6 transition-all ${deuda.completada
-                      ? 'border-slate-800 opacity-60'
-                      : vencida
-                        ? 'border-red-500/50'
-                        : 'border-slate-800 hover:border-slate-600'
+                    ? 'border-slate-800 opacity-60'
+                    : vencida
+                      ? 'border-red-500/50'
+                      : 'border-slate-800 hover:border-slate-600'
                     }`}
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl ${deuda.tipo === 'debo'
-                          ? 'bg-red-500/10'
-                          : 'bg-green-500/10'
-                        }`}>
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xl ${deuda.tipo === 'debo' ? 'bg-red-500/10' : 'bg-green-500/10'}`}>
                         {deuda.tipo === 'debo' ? '💸' : '💰'}
                       </div>
                       <div>
@@ -201,12 +219,21 @@ export default function Deudas() {
                       </div>
                     </div>
 
+                    {/* Acciones */}
                     <div className="flex items-center gap-2">
+                      {!deuda.completada && (
+                        <button
+                          onClick={() => { setDeudaAbonar(deuda); setShowAbono(true) }}
+                          className="px-3 py-1 text-xs font-medium text-teal-400 transition-all border rounded-lg border-teal-500/30 hover:bg-teal-500/10"
+                        >
+                          💳 Abonar
+                        </button>
+                      )}
                       <button
                         onClick={() => handleCompletar(deuda)}
                         className={`text-xs px-2 py-1 rounded-lg border transition-all ${deuda.completada
-                            ? 'border-slate-600 text-slate-500 hover:text-white'
-                            : 'border-teal-500/30 text-teal-400 hover:bg-teal-500/10'
+                          ? 'border-slate-600 text-slate-500 hover:text-white'
+                          : 'border-teal-500/30 text-teal-400 hover:bg-teal-500/10'
                           }`}
                       >
                         {deuda.completada ? 'Reabrir' : '✓ Completar'}
@@ -230,20 +257,15 @@ export default function Deudas() {
                   <div className="grid grid-cols-3 gap-4 mb-4">
                     <div>
                       <p className="mb-1 text-xs text-slate-500">Total</p>
-                      <p className="font-semibold text-white">
-                        L {formatMonto(Number(deuda.monto_total))}
-                      </p>
+                      <p className="font-semibold text-white">L {formatMonto(Number(deuda.monto_total))}</p>
                     </div>
                     <div>
                       <p className="mb-1 text-xs text-slate-500">Pagado</p>
-                      <p className="font-semibold text-teal-400">
-                        L {formatMonto(Number(deuda.monto_pagado))}
-                      </p>
+                      <p className="font-semibold text-teal-400">L {formatMonto(Number(deuda.monto_pagado))}</p>
                     </div>
                     <div>
                       <p className="mb-1 text-xs text-slate-500">Pendiente</p>
-                      <p className={`font-semibold ${deuda.tipo === 'debo' ? 'text-red-400' : 'text-green-400'
-                        }`}>
+                      <p className={`font-semibold ${deuda.tipo === 'debo' ? 'text-red-400' : 'text-green-400'}`}>
                         L {formatMonto(pendiente)}
                       </p>
                     </div>
@@ -257,13 +279,10 @@ export default function Deudas() {
                     />
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-xs text-slate-500">
-                      {Math.round(porcentaje)}% pagado
-                    </span>
+                    <span className="text-xs text-slate-500">{Math.round(porcentaje)}% pagado</span>
                     {deuda.fecha_limite && (
                       <span className={`text-xs ${vencida ? 'text-red-400' : 'text-slate-500'}`}>
-                        Vence: {new Date(deuda.fecha_limite + 'T12:00:00')
-                          .toLocaleDateString('es-HN')}
+                        Vence: {new Date(deuda.fecha_limite + 'T12:00:00').toLocaleDateString('es-HN')}
                       </span>
                     )}
                   </div>
@@ -272,7 +291,6 @@ export default function Deudas() {
             })}
           </div>
         )}
-
       </div>
 
       {/* Botón flotante */}
@@ -287,6 +305,14 @@ export default function Deudas() {
         <FormDeuda
           deuda={deudaEditar}
           onClose={() => { setShowForm(false); setDeudaEditar(null) }}
+          onSuccess={cargarDeudas}
+        />
+      )}
+
+      {showAbono && deudaAbonar && (
+        <FormAbono
+          deuda={deudaAbonar}
+          onClose={() => { setShowAbono(false); setDeudaAbonar(null) }}
           onSuccess={cargarDeudas}
         />
       )}
