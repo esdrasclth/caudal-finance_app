@@ -7,7 +7,7 @@ import { useState } from 'react'
 
 const NAV_ITEMS = [
   { href: '/dashboard', icono: '⊞', label: 'Dashboard' },
-  { href: '/transacciones', icono: '↕', label: 'Transacciones' },
+  { href: '/transacciones', icono: 'svg', label: 'Movimientos' },
   { href: '/presupuesto', icono: '◎', label: 'Presupuestos' },
   { href: '/carteras', icono: '◈', label: 'Carteras' },
   { href: '/categorias', icono: '🏷', label: 'Categorías' },
@@ -16,6 +16,13 @@ const NAV_ITEMS = [
   { href: '/reportes', icono: '📊', label: 'Reportes' },
   { href: '/perfil', icono: '⚙️', label: 'Configuración' },
 ]
+
+const IconoMovimientos = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M7 16V4m0 0L3 8m4-4l4 4" />
+    <path d="M17 8v12m0 0l4-4m-4 4l-4-4" />
+  </svg>
+)
 
 function MasMenu({ pathname, router }: { pathname: string, router: any }) {
   const [abierto, setAbierto] = useState(false)
@@ -32,30 +39,19 @@ function MasMenu({ pathname, router }: { pathname: string, router: any }) {
 
   return (
     <>
-      {/* Overlay */}
       {abierto && (
-        <div
-          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
-          onClick={() => setAbierto(false)}
-        />
+        <div className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm" onClick={() => setAbierto(false)} />
       )}
 
-      {/* Panel de más opciones */}
       {abierto && (
         <div className="fixed z-50 w-48 overflow-hidden border shadow-xl bottom-16 right-2 bg-slate-800 border-slate-700 rounded-2xl">
-          
           {MAS_ITEMS.map(item => {
             const activo = pathname === item.href
             return (
               <button
                 key={item.href}
-                onClick={() => {
-                  router.push(item.href)
-                  setAbierto(false)
-                }}
-                className={`w-full flex items-center gap-3 px-4 py-3 text-sm transition-colors border-b border-slate-700/50 last:border-0 ${activo
-                    ? 'bg-teal-500/10 text-teal-400'
-                    : 'text-slate-300 hover:bg-slate-700/50'
+                onClick={() => { router.push(item.href); setAbierto(false) }}
+                className={`w-full flex items-center gap-3 px-4 py-3 text-sm transition-colors border-b border-slate-700/50 last:border-0 ${activo ? 'bg-teal-500/10 text-teal-400' : 'text-slate-300 hover:bg-slate-700/50'
                   }`}
               >
                 <span className="text-lg">{item.icono}</span>
@@ -67,15 +63,12 @@ function MasMenu({ pathname, router }: { pathname: string, router: any }) {
         </div>
       )}
 
-      {/* Botón Más */}
       <button
         onClick={() => setAbierto(!abierto)}
         className={`flex-1 flex flex-col items-center gap-0.5 py-3 text-xs transition-all ${algunoActivo || abierto ? 'text-teal-400' : 'text-slate-500'
           }`}
       >
-        <span className={`text-xl transition-transform ${abierto ? 'rotate-45' : ''}`}>
-          ⊕
-        </span>
+        <span className={`text-xl transition-transform ${abierto ? 'rotate-45' : ''}`}>⊕</span>
         <span className="text-[10px]">Más</span>
         {algunoActivo && !abierto && <div className="w-1 h-1 bg-teal-400 rounded-full" />}
       </button>
@@ -100,9 +93,7 @@ export default function Sidebar({ usuario }: { usuario: any }) {
         {/* Logo */}
         <div className="p-6 border-b border-slate-800">
           <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center text-lg bg-teal-500 w-9 h-9 rounded-xl">
-              💧
-            </div>
+            <div className="flex items-center justify-center text-lg bg-teal-500 w-9 h-9 rounded-xl">💧</div>
             <div>
               <p className="text-lg font-bold leading-none text-white">Caudal</p>
               <p className="text-xs text-slate-500">Finanzas Personales</p>
@@ -118,9 +109,7 @@ export default function Sidebar({ usuario }: { usuario: any }) {
                 {usuario?.nombre?.charAt(0).toUpperCase()}
               </div>
               <div className="overflow-hidden">
-                <p className="text-sm font-medium text-white truncate">
-                  {usuario?.nombre}
-                </p>
+                <p className="text-sm font-medium text-white truncate">{usuario?.nombre}</p>
                 <p className="text-xs text-slate-500">Cuenta activa</p>
               </div>
             </div>
@@ -141,11 +130,11 @@ export default function Sidebar({ usuario }: { usuario: any }) {
                     : 'text-slate-400 hover:text-white hover:bg-slate-800'
                   }`}
               >
-                <span className="text-lg">{item.icono}</span>
+                <span className="text-lg">
+                  {item.icono === 'svg' ? <IconoMovimientos /> : item.icono}
+                </span>
                 {item.label}
-                {activo && (
-                  <div className="ml-auto w-1.5 h-1.5 bg-teal-400 rounded-full" />
-                )}
+                {activo && <div className="ml-auto w-1.5 h-1.5 bg-teal-400 rounded-full" />}
               </button>
             )
           })}
@@ -164,14 +153,11 @@ export default function Sidebar({ usuario }: { usuario: any }) {
       </aside>
 
       {/* Bottom Nav Mobile */}
-      {/* Bottom Nav Mobile */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 border-t lg:hidden bg-slate-900/95 backdrop-blur border-slate-800">
         <div className="flex items-center">
-
-          {/* Items principales */}
           {[
             { href: '/dashboard', icono: '⊞', label: 'Inicio' },
-            { href: '/transacciones', icono: '↕', label: 'Movimientos' },
+            { href: '/transacciones', icono: 'svg', label: 'Movimientos' },
             { href: '/presupuesto', icono: '◎', label: 'Presupuesto' },
             { href: '/carteras', icono: '◈', label: 'Carteras' },
           ].map(item => {
@@ -183,18 +169,15 @@ export default function Sidebar({ usuario }: { usuario: any }) {
                 className={`flex-1 flex flex-col items-center gap-0.5 py-3 text-xs transition-all ${activo ? 'text-teal-400' : 'text-slate-500'
                   }`}
               >
-                <span className={`text-xl ${activo ? 'scale-110' : ''} transition-transform`}>
-                  {item.icono}
+                <span className={`${activo ? 'scale-110' : ''} transition-transform flex items-center justify-center`}>
+                  {item.icono === 'svg' ? <IconoMovimientos /> : <span className="text-xl">{item.icono}</span>}
                 </span>
                 <span className="text-[10px]">{item.label}</span>
                 {activo && <div className="w-1 h-1 bg-teal-400 rounded-full" />}
               </button>
             )
           })}
-
-          {/* Botón Más */}
           <MasMenu pathname={pathname} router={router} />
-
         </div>
       </nav>
     </>
