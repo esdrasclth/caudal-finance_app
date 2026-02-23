@@ -9,6 +9,7 @@ import GraficaMensual from '../components/GraficaMensual'
 import FormTransaccion from '../components/FormTransaccion'
 import { SkeletonStats, SkeletonChart, SkeletonList } from '../components/Skeleton'
 import Notificaciones from '../components/Notificaciones'
+import CalendarioFinanciero from '../components/CalendarioFinanciero'
 
 export default function Dashboard() {
   const router = useRouter()
@@ -188,7 +189,7 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 gap-6 mb-8 lg:grid-cols-2">
           <div className="p-6 border bg-slate-900 border-slate-800 rounded-2xl">
             <h2 className="mb-1 font-semibold text-white">
-              {vistaGrafica === 'gasto' ? 'Gastos por categoría' : 'Ingresos por categoría'}
+              {vistaGrafica === 'gasto' ? 'Gastos por Categoría' : 'Ingresos por Categoría'}
             </h2>
             <p className="mb-4 text-xs text-slate-500">Distribución del mes</p>
             <GraficaGastos
@@ -202,7 +203,14 @@ export default function Dashboard() {
             <p className="mb-4 text-xs text-slate-500">Ingresos vs Gastos</p>
             <GraficaMensual transacciones={transacciones} />
           </div>
+          <div className="flex flex-col p-6 border bg-slate-900 border-slate-800 rounded-2xl">
+            <h2 className="mb-1 font-semibold text-white">Calendario Financiero</h2>
+            <p className="mb-4 text-xs text-slate-500">Actividad diaria del mes</p>
+            <CalendarioFinanciero transacciones={transacciones} mes={getMesActual()} />
+          </div>
         </div>
+
+        
 
         {/* Últimas transacciones */}
         <div className="p-6 border bg-slate-900 border-slate-800 rounded-2xl">
