@@ -17,6 +17,7 @@ export default function Dashboard() {
   const [showForm, setShowForm] = useState(false)
   const [resumen, setResumen] = useState({ ingresos: 0, gastos: 0 })
   const [loading, setLoading] = useState(true)
+  const [vistaGrafica, setVistaGrafica] = useState<'gasto' | 'ingreso'>('gasto')
 
   useEffect(() => {
     const init = async () => {
@@ -140,9 +141,15 @@ export default function Dashboard() {
         {/* Gráficas */}
         <div className="grid grid-cols-1 gap-6 mb-8 lg:grid-cols-2">
           <div className="p-6 border bg-slate-900 border-slate-800 rounded-2xl">
-            <h2 className="mb-1 font-semibold text-white">Gastos por categoría</h2>
+            <h2 className="mb-1 font-semibold text-white">
+              {vistaGrafica === 'gasto' ? 'Gastos por categoría' : 'Ingresos por categoría'}
+            </h2>
             <p className="mb-4 text-xs text-slate-500">Distribución del mes</p>
-            <GraficaGastos transacciones={transacciones} />
+            <GraficaGastos
+              transacciones={transacciones}
+              vista={vistaGrafica}
+              onVistaChange={setVistaGrafica}
+            />
           </div>
           <div className="flex flex-col p-6 border bg-slate-900 border-slate-800 rounded-2xl">
             <h2 className="mb-1 font-semibold text-white">Movimientos diarios</h2>
